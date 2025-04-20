@@ -1,0 +1,1 @@
+Simple blockchain implementation that employs SHA3-256 hashing of a nonce and timestamp.

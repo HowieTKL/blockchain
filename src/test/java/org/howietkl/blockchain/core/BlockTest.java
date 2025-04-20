@@ -1,14 +1,28 @@
-package blockchain.core;
+package org.howietkl.blockchain.core;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class BlockTest {
-	
+	private static final Logger LOG = LoggerFactory.getLogger(BlockTest.class);
+
+	@BeforeEach
+	void setUp() {
+	}
+
+	@AfterEach
+	void tearDown() {
+	}
+
 	@Test
-	public void getDifficulty() {
+	public void testGetDifficulty() {
 		assertEquals(0, Block.getDifficulty(null));
 		assertEquals(0, Block.getDifficulty(new char[0]));
 		assertEquals(0, Block.getDifficulty(new char[] {'1'}));
@@ -21,20 +35,20 @@ public class BlockTest {
 	}
 
 	@Test
-	public void match() {
+	public void testMatch() {
 		char[] data;
 		
 		data = Block.getEmptyData(10);
 		data[0] = '1';
-		assertTrue(!Block.match(data, 1));
+    assertFalse(Block.match(data, 1));
 
 		data = Block.getEmptyData(10);
 		data[0] = '1';
-		assertTrue(!Block.match(data, 2));
+    assertFalse(Block.match(data, 2));
 
 		data = Block.getEmptyData(10);
 		data[1] = '1';
-		assertTrue(!Block.match(data, 2));
+    assertFalse(Block.match(data, 2));
 
 		data = Block.getEmptyData(10);
 		data[5] = '1';
@@ -42,66 +56,66 @@ public class BlockTest {
 
 		data = Block.getEmptyData(10);
 		data[0] = '1';
-		assertTrue(!Block.match(data, 5));
+    assertFalse(Block.match(data, 5));
 
 		data = Block.getEmptyData(10);
 		data[4] = '1';
-		assertTrue(!Block.match(data, 5));
+    assertFalse(Block.match(data, 5));
 		
 		data = Block.getEmptyData(10);
 		assertTrue(Block.match(data, 10));
 
 		data = Block.getEmptyData(10);
-		assertTrue(!Block.match(data, 0));
+    assertFalse(Block.match(data, 0));
 
 		data = Block.getEmptyData(10);
-		assertTrue(!Block.match(data, 1));
+    assertFalse(Block.match(data, 1));
 
 		data = Block.getEmptyData(10);
-		assertTrue(!Block.match(data, 2));
+    assertFalse(Block.match(data, 2));
 
 		data = Block.getEmptyData(10);
-		assertTrue(!Block.match(data, 11));
+    assertFalse(Block.match(data, 11));
 	}
 	
 	@Test
-	public void Block0() {
+	public void testBlock0() {
 		createBlock(0);
 	}
 	
 	@Test
-	public void Block1() {
+	public void testBlock1() {
 		createBlock(1);
 	}
 	
 	@Test
-	public void Block2() {
+	public void testBlock2() {
 		createBlock(2);
 	}
 	
 	@Test
-	public void Block3() {
+	public void testBlock3() {
 		createBlock(3);
 	}
 	
 	@Test
-	public void Block4() {
+	public void testBlock4() {
 		createBlock(4);
 	}
 
 	@Test
-	public void Block() {
+	public void testBlock() {
 		try {
 			Block b = new Block("test", -1);
 			char[] hash = Block.getHashChars(b.getHashBytes());
-			assertEquals(new String(hash), Block.DEFAULT_DIFFICULTY, Block.getDifficulty(hash));
+			assertEquals(Block.DEFAULT_DIFFICULTY, Block.getDifficulty(hash));
 		} catch (Exception e) {
-			e.printStackTrace();
+			LOG.error(e.getMessage(), e);
 		}
 	}
 	
 	@Test
-	public void benchmark() {
+	public void testBenchmark() {
 		Block.benchmark(300);
 	}
 
@@ -109,9 +123,10 @@ public class BlockTest {
 		try {
 			Block b = new Block("test", difficulty);
 			char[] hash = Block.getHashChars(b.getHashBytes());
-			assertEquals(new String(hash), difficulty, Block.getDifficulty(hash));
+			assertEquals(difficulty, Block.getDifficulty(hash));
 		} catch (Exception e) {
-			e.printStackTrace();
+			LOG.error(e.getMessage(), e);
 		}
 	}
+
 }
